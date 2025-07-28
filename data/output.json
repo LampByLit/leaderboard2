@@ -1,7 +1,89 @@
 {
-  "books": [],
-  "generatedAt": "",
-  "totalBooks": 0,
-  "validBooks": 0,
+  "books": [
+    {
+      "url": "https://www.amazon.com/Harassment-Architecture-Mike-Mangold/dp/1795641495",
+      "isValidPaperback": true,
+      "title": "Harassment Architecture",
+      "author": "Mike Ma",
+      "bestSellersRank": 56212,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/71YXCVlwmrL._SY385_.jpg",
+      "scrapedAt": "2025-07-28T22:59:34.198Z"
+    },
+    {
+      "url": "https://www.amazon.com/NUTCRANKR-Dan-Baltic/dp/195189779X",
+      "isValidPaperback": true,
+      "title": "NUTCRANKR",
+      "author": "Dan Baltic",
+      "bestSellersRank": 138298,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/61iNMBGB3dL._SY425_.jpg",
+      "scrapedAt": "2025-07-28T22:59:22.259Z"
+    },
+    {
+      "url": "https://www.amazon.com/Mixtape-Hyperborea-Adem-Luz-Rienspects/dp/B0BW32CX2G",
+      "isValidPaperback": true,
+      "title": "Mixtape Hyperborea",
+      "author": "Adem Luz Rienspects",
+      "bestSellersRank": 186016,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/71Z6dEF6rBL._SY425_.jpg",
+      "scrapedAt": "2025-07-28T23:00:46.231Z"
+    },
+    {
+      "url": "https://www.amazon.com/Finally-Some-Good-Delicious-Tacos/dp/1790356229",
+      "isValidPaperback": true,
+      "title": "Finally, Some Good News",
+      "author": "Delicious Tacos",
+      "bestSellersRank": 316535,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/51sk88kZsRL._SY385_.jpg",
+      "scrapedAt": "2025-07-28T22:59:46.459Z"
+    },
+    {
+      "url": "https://www.amazon.com/Improvidence-David-Herod/dp/B0CWCF7J13",
+      "isValidPaperback": true,
+      "title": "Improvidence",
+      "author": "Herod, David",
+      "bestSellersRank": 361291,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/61EhziObbuL._SY425_.jpg",
+      "scrapedAt": "2025-07-28T22:59:55.279Z"
+    },
+    {
+      "url": "https://www.amazon.com/INCEL-Novel-ARX-Han/dp/B0CJLCZVCG",
+      "isValidPaperback": true,
+      "title": "INCEL",
+      "author": "ARX-Han",
+      "bestSellersRank": 504729,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/81DwGA83SgL._SY385_.jpg",
+      "scrapedAt": "2025-07-28T23:00:06.841Z"
+    },
+    {
+      "url": "https://www.amazon.com/Tower-Jack-BC/dp/0645928208",
+      "isValidPaperback": true,
+      "title": "Tower",
+      "author": "BC, Jack",
+      "bestSellersRank": 1451972,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/81DDmmTZu1L._SY385_.jpg",
+      "scrapedAt": "2025-07-28T23:00:37.743Z"
+    },
+    {
+      "url": "https://www.amazon.com/dp/B0BRC7Z2Q9",
+      "isValidPaperback": true,
+      "title": "Fedbook",
+      "author": "John Jay Stancliff",
+      "bestSellersRank": 1669691,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/41q8CLN+x6L._SY425_.jpg",
+      "scrapedAt": "2025-07-28T23:00:16.491Z"
+    },
+    {
+      "url": "https://www.amazon.com/Eggplant-Ogden-Nesmer/dp/B09MJBNL7X",
+      "isValidPaperback": true,
+      "title": "Eggplant",
+      "author": "Ogden Nesmer",
+      "bestSellersRank": 3948618,
+      "coverArtUrl": "https://m.media-amazon.com/images/I/71sQQGkR2TL._SY342_.jpg",
+      "scrapedAt": "2025-07-28T23:00:23.615Z"
+    }
+  ],
+  "generatedAt": "2025-07-28T23:11:58.147Z",
+  "totalBooks": 9,
+  "validBooks": 9,
   "failedBooks": 0
-} 
+}
