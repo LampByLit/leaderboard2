@@ -19,7 +19,7 @@ We are building a tool that will scrape a list of URLs to Amazon links for paper
 ## Tech Stack
 - **Frontend**: Next.js 14+ with App Router
 - **Language**: TypeScript (strict mode)
-- **Styling**: Vanilla CSS with Material Design principles
+- **Styling**: Tailwind CSS with Material Design principles
 - **Data Storage**: JSON files in /data directory
 - **Scraping**: Manual HTTP requests with Node.js fetch()
 - **Deployment**: Railway.app
@@ -157,18 +157,18 @@ interface OutputData {
 - Use 2-space indentation
 
 ## UI and Styling
-- Use vanilla CSS with Material Design principles
+- Use Tailwind CSS with Material Design principles
   - Implement a clean, Google-like Material Design theme with:
     - Consistent typography using Roboto font
     - Material color system with primary and secondary colors
-    - Elevation and shadow hierarchy
-    - Responsive grid layout
-    - Material Design components (cards, buttons, inputs)
-  - Ensure proper spacing and alignment using Material Design's 8dp grid
-  - Use CSS modules for component-specific styling
+    - Elevation and shadow hierarchy using Tailwind's shadow utilities
+    - Responsive grid layout using Tailwind's grid system
+    - Material Design components (cards, buttons, inputs) built with Tailwind classes
+  - Ensure proper spacing and alignment using Material Design's 8dp grid (8px = 2rem in Tailwind)
+  - Use Tailwind's utility classes for component-specific styling
   - Implement responsive design breakpoints following Material Design guidelines
-  - Maintain proper contrast ratios for accessibility
-  - Use loading states and transitions for better UX
+  - Maintain proper contrast ratios for accessibility using Tailwind's color utilities
+  - Use loading states and transitions for better UX with Tailwind's transition utilities
   
 ## Performance Optimization
 - Minimize 'use client', 'useEffect', and 'setState'; favor React Server Components (RSC)
@@ -237,18 +237,18 @@ interface OutputData {
 ## Frontend Components
 - Build with Next.js App Router and TypeScript
 - Use Server Components by default, Client Components only when necessary
-- Implement Material Design components for:
-  - Book summaries displayed in cards
+- Implement Material Design components using Tailwind CSS for:
+  - Book summaries displayed in cards with elevation and proper spacing
   - Category navigation using tabs or navigation drawer
-  - Loading states and error boundaries
-  - Responsive grid layout for different screen sizes
+  - Loading states and error boundaries with skeleton components
+  - Responsive grid layout for different screen sizes using Tailwind's grid system
 - Sort books by Best Sellers Rank and timestamp
 - Include metadata (timestamp, category, source URL) with each book
 - Implement proper error handling with user-friendly error states
-- Use skeleton loading states during data fetching
+- Use skeleton loading states during data fetching with Tailwind's animate-pulse
 - Optimize for Core Web Vitals (LCP, CLS, FID)
 - Implement infinite scroll or pagination for book lists
-- Add dark/light theme support following Material Design guidelines
+- Add dark/light theme support following Material Design guidelines using Tailwind's dark mode
 
 ## Comments
 - Always use comments, and always keep comments descriptive and up to date
