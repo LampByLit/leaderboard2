@@ -12,11 +12,40 @@ export function Leaderboard({ data }: LeaderboardProps) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Amazon Paperback Leaderboard
-        </h1>
-        <p className="text-gray-600">
-          Books ranked by Best Sellers Rank (BSR) - Lower numbers are better
+        <div className="flex items-center justify-center mb-4">
+          <a 
+            href="https://lampbylit.com/magazine/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity duration-200"
+          >
+            <img 
+              src="/logo01.png" 
+              alt="Lamp by Lit Magazine" 
+              className="h-16 md:h-20"
+            />
+          </a>
+        </div>
+        <p className="text-gray-600 text-justify max-w-4xl mx-auto leading-relaxed text-sm">
+          This leaderboard uses several exhaustive methods to scrape Amazon paperback links and sort them by Best Sellers Rank. Amazon employs very strict anti-bot measures. This tool could break at any moment. If you want to add your book to the leaderboard,{' '}
+          <a 
+            href="https://x.com/recapitul8r" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-primary-600 hover:text-primary-700 underline transition-colors duration-200"
+          >
+            contact me
+          </a>
+          . This leaderboard will automatically update once daily. A stable version of this tool can be downloaded from{' '}
+          <a 
+            href="https://github.com/LampByLit/leaderboard2" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-primary-600 hover:text-primary-700 underline transition-colors duration-200"
+          >
+            GitHub
+          </a>
+          .
         </p>
       </div>
 
