@@ -6,7 +6,7 @@
  */
 
 import { spawn } from 'child_process';
-import { startScheduler } from '../lib/scheduler';
+import { startScheduler, runCycleNow } from '../lib/scheduler';
 
 /**
  * Starts the production environment
@@ -38,6 +38,12 @@ async function startProduction() {
           
           // Start the scheduler only after app is ready
           startScheduler();
+          
+          // Run an immediate cycle to populate data
+          console.log('🚀 Running immediate cycle to populate data...');
+          runCycleNow().catch(error => {
+            console.error('⚠️ Immediate cycle failed, but scheduler will continue:', error);
+          });
         }
       }
     });
@@ -51,6 +57,12 @@ async function startProduction() {
       if (!appReady) {
         console.log('⏰ Fallback: Starting scheduler after 30s timeout...');
         startScheduler();
+        
+        // Also run immediate cycle in fallback
+        console.log('🚀 Running immediate cycle (fallback)...');
+        runCycleNow().catch(error => {
+          console.error('⚠️ Immediate cycle failed, but scheduler will continue:', error);
+        });
       }
     }, 30000);
     

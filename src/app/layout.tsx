@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Amazon Paperback Leaderboard",
+  title: "&amp Leaderboard",
   description: "Track and compare Amazon paperback books by Best Sellers Rank",
   icons: {
     icon: '/favicon.png',
