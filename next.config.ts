@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Disable SWC to avoid build issues on Railway
+  experimental: {
+    // Disable SWC compiler
+    forceSwcTransforms: false,
+  },
   images: {
     remotePatterns: [
       {

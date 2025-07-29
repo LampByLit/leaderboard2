@@ -1,4 +1,4 @@
-import cron from 'node-cron';
+import * as cron from 'node-cron';
 import { runDailyCycle } from './cycle';
 
 /**
@@ -29,7 +29,6 @@ export function startScheduler(): void {
       // Don't throw here - let the scheduler continue running
     }
   }, {
-    scheduled: true,
     timezone: 'UTC' // Explicitly set UTC timezone
   });
   
