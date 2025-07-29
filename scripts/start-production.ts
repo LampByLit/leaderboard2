@@ -15,17 +15,44 @@ async function startProduction() {
   console.log('🚀 Starting production environment...');
   
   try {
-    // Start the scheduler in the background
-    console.log('⏰ Starting daily scheduler...');
-    startScheduler();
-    
-    // Start the Next.js app
+    // Start the Next.js app first
     console.log('🌐 Starting Next.js application...');
     
     const nextApp = spawn('npm', ['start'], {
-      stdio: 'inherit',
+      stdio: 'pipe', // Change to pipe so we can listen to output
       shell: true
     });
+    
+    let appReady = false;
+    
+    // Listen for Next.js startup messages
+    nextApp.stdout?.on('data', (data) => {
+      const output = data.toString();
+      console.log(output.trim());
+      
+      // Check if Next.js is ready (listening on port)
+      if (output.includes('Ready') || output.includes('started server') || output.includes('Local:')) {
+        if (!appReady) {
+          appReady = true;
+          console.log('✅ Next.js app is ready! Starting scheduler...');
+          
+          // Start the scheduler only after app is ready
+          startScheduler();
+        }
+      }
+    });
+    
+    nextApp.stderr?.on('data', (data) => {
+      console.error(data.toString().trim());
+    });
+    
+    // Fallback: start scheduler after 30 seconds if app doesn't signal ready
+    setTimeout(() => {
+      if (!appReady) {
+        console.log('⏰ Fallback: Starting scheduler after 30s timeout...');
+        startScheduler();
+      }
+    }, 30000);
     
     // Handle process termination
     process.on('SIGINT', () => {
