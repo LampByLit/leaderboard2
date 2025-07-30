@@ -16,8 +16,6 @@ export const HARDCODED_URLS = [
   'https://www.amazon.com/Mixtape-Hyperborea-Adem-Luz-Rienspects/dp/B0BW32CX2G', 
   'https://www.amazon.com/Savage-Green-Zulu-Alitspa/dp/B0B9265BPY',
   'https://www.amazon.com/Shards-City-Robert-James-Cross/dp/B0DLGLKGFB',
-  'https://www.amazon.com/People-Mover-John-David-Card/dp/B0B477N8ZG',
-  'https://www.amazon.com/dp/B0BYRNM6Z5',
   'https://www.amazon.com/SOCIOPATH-primadonna-girl-SAGA-dreamlander/dp/B09CV11BM9',
   'https://www.amazon.com/Book-Void-Sun-Lion-Serpent-feet-Christ/dp/B09JJFF82K',
   'https://www.amazon.com/Beautiful-Kingdom-K-K-Wing/dp/B0BTRTBP5H/',
