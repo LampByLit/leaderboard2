@@ -37,9 +37,14 @@ export function BookCard({ book, rank }: BookCardProps) {
           #{rank}
         </div>
         
-        {/* Book Cover */}
+        {/* Book Cover - Clickable Link */}
         <div className="flex-shrink-0">
-          <div className="relative w-20 h-28 rounded-md overflow-hidden shadow-material-1">
+          <a 
+            href={book.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block relative w-20 h-28 rounded-md overflow-hidden shadow-material-1 hover:shadow-material-2 transition-shadow duration-200"
+          >
             <Image
               src={book.coverArtUrl}
               alt={`Cover of ${book.title}`}
@@ -47,14 +52,21 @@ export function BookCard({ book, rank }: BookCardProps) {
               className="object-cover"
               sizes="80px"
             />
-          </div>
+          </a>
         </div>
         
         {/* Book Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-medium text-gray-900 break-words leading-tight">
-            {book.title}
-          </h3>
+          <a 
+            href={book.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block hover:text-primary-600 transition-colors duration-200"
+          >
+            <h3 className="text-lg font-medium text-gray-900 break-words leading-tight hover:text-primary-600">
+              {book.title}
+            </h3>
+          </a>
           <p className="text-sm text-gray-600 mt-1">
             by {normalizeAuthorName(book.author)}
           </p>
