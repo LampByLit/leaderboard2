@@ -26,6 +26,9 @@ export const HARDCODED_URLS = [
   'https://www.amazon.com/Soap-Scum-Jesse-Larkins/dp/B0DFTCW5XV',
   'https://www.amazon.com/Call-Crocodile-Horrors-F-Gardner/dp/B098JL3WY3/',
   'https://www.amazon.com/dp/B0DZVMX6KV/',
+  'https://www.amazon.com/Raft-Micro-Novel-Phil-Rot/dp/B0DQ5PV8BX',
+  'https://www.amazon.com/LAcad%C3%A9mie-R-C-Waldun/dp/0648963209',
+  'https://www.amazon.com/Synthesis-Objective-Subjective-Writing-philosophy/dp/1777255511',
 
   // Add more URLs here as needed
 ];
