@@ -121,7 +121,7 @@ function extractTitle(html: string): string | null {
  */
 function extractAuthor(html: string): string | null {
   try {
-    // Pattern 1: Author link with (Author) text in proximity
+    // Pattern 1: Author link with (Author) text in proximity - most reliable
     const authorMatch1 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)<\/span>/);
     if (authorMatch1 && authorMatch1[1]) {
       return authorMatch1[1].trim();
@@ -149,6 +149,57 @@ function extractAuthor(html: string): string | null {
     const metaAuthorMatch = html.match(/<meta[^>]*name="title"[^>]*content="[^"]*:\s*[^:]+:\s*([^:]+):/);
     if (metaAuthorMatch && metaAuthorMatch[1]) {
       return metaAuthorMatch[1].trim();
+    }
+    
+    // Pattern 6: NEW - Look for author in structured data (JSON-LD)
+    const jsonLdMatches = html.match(/<script[^>]*type="application\/ld\+json"[^>]*>([^<]+)<\/script>/g);
+    if (jsonLdMatches) {
+      for (const jsonLd of jsonLdMatches) {
+        try {
+          const jsonContent = jsonLd.replace(/<script[^>]*type="application\/ld\+json"[^>]*>/, '').replace(/<\/script>/, '');
+          const data = JSON.parse(jsonContent);
+          
+          // Check for author in various structured data formats
+          if (data.author && typeof data.author === 'string') {
+            return data.author.trim();
+          }
+          if (data.author && data.author.name) {
+            return data.author.name.trim();
+          }
+          if (data.creator && typeof data.creator === 'string') {
+            return data.creator.trim();
+          }
+          if (data.creator && data.creator.name) {
+            return data.creator.name.trim();
+          }
+        } catch {
+          // Continue to next JSON-LD block
+        }
+      }
+    }
+    
+    // Pattern 7: NEW - Look for author in product details section
+    const productDetailsMatch = html.match(/<div[^>]*id="detailBullets_feature_div"[^>]*>.*?<span[^>]*class="[^"]*a-text-bold[^"]*"[^>]*>Author<\/span>.*?<span[^>]*>([^<]+)<\/span>/s);
+    if (productDetailsMatch && productDetailsMatch[1]) {
+      return productDetailsMatch[1].trim();
+    }
+    
+    // Pattern 8: NEW - Look for author in contributor section
+    const contributorMatch = html.match(/<div[^>]*id="bylineInfo"[^>]*>.*?<a[^>]*>([^<]+)<\/a>/s);
+    if (contributorMatch && contributorMatch[1]) {
+      return contributorMatch[1].trim();
+    }
+    
+    // Pattern 9: NEW - Look for author in any link near "by" text
+    const byAuthorMatch = html.match(/by\s*<a[^>]*>([^<]+)<\/a>/i);
+    if (byAuthorMatch && byAuthorMatch[1]) {
+      return byAuthorMatch[1].trim();
+    }
+    
+    // Pattern 10: NEW - Look for author in title meta tag
+    const titleMetaMatch = html.match(/<meta[^>]*name="title"[^>]*content="[^"]*by\s+([^"]+)"/i);
+    if (titleMetaMatch && titleMetaMatch[1]) {
+      return titleMetaMatch[1].trim();
     }
     
     return null;
