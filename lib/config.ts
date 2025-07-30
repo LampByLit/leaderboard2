@@ -19,7 +19,10 @@ export const HARDCODED_URLS = [
   'https://www.amazon.com/SOCIOPATH-primadonna-girl-SAGA-dreamlander/dp/B09CV11BM9',
   'https://www.amazon.com/Book-Void-Sun-Lion-Serpent-feet-Christ/dp/B09JJFF82K',
   'https://www.amazon.com/Beautiful-Kingdom-K-K-Wing/dp/B0BTRTBP5H/',
-  'https://www.amazon.com/Last-Free-Man-Other-Stories/dp/1925536882',   
+  'https://www.amazon.com/Last-Free-Man-Other-Stories/dp/1925536882', 
+  'https://www.amazon.com/Odyssey-Dingbats-collection-stories-obscurities/dp/B0DT6X7HJ9',  
+  'https://www.amazon.com/Worst-Boyfriend-Ever-Sensitive-Young/dp/B0F3XSJGSD',
+  'https://www.amazon.com/Black-Album-Matthew-Pegas/dp/B0CZ4MCD7X',
   // Add more URLs here as needed
 ];
 
