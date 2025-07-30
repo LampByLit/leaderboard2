@@ -51,9 +51,15 @@ function debugExtraction(html: string, url: string): void {
   const titleMatch = html.match(/id="productTitle"[^>]*>([^<]+)</);
   console.log(`Title found: ${titleMatch ? titleMatch[1] : 'NOT FOUND'}`);
   
-  // Check for author
-  const authorMatch = html.match(/<a[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>/);
-  console.log(`Author found: ${authorMatch ? authorMatch[1] : 'NOT FOUND'}`);
+  // Check for various author patterns
+  const fieldAuthorMatch = html.match(/field-author=([^&]+)/);
+  console.log(`field-author found: ${fieldAuthorMatch ? decodeURIComponent(fieldAuthorMatch[1].replace(/\+/g, ' ')) : 'NOT FOUND'}`);
+  
+  const authorMatch = html.match(/<a[^>]*href="[^"]*field-author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>/);
+  console.log(`Author link with field-author: ${authorMatch ? decodeURIComponent(authorMatch[2].replace(/\+/g, ' ')) : 'NOT FOUND'}`);
+  
+  const authorTextMatch = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
+  console.log(`Author with (Author) text: ${authorTextMatch ? authorTextMatch[1] : 'NOT FOUND'}`);
   
   // Check for BSR
   const bsrMatch = html.match(/#([0-9,]+)\s+in\s+Books/);
@@ -116,70 +122,55 @@ function extractTitle(html: string): string | null {
 }
 
 /**
- * Normalizes author name from "Last, First" format to "First Last" format
- * For multiple authors, selects only the primary (first) author
- */
-function normalizeAuthorName(author: string): string {
-  // Handle multiple authors by taking only the first one
-  const firstAuthor = author.split(',')[0].trim();
-  
-  // Check if the first author is in "Last, First" format
-  if (firstAuthor.includes(', ')) {
-    const parts = firstAuthor.split(', ');
-    if (parts.length === 2) {
-      // Reverse to "First Last" format
-      return `${parts[1]} ${parts[0]}`;
-    }
-  }
-  
-  // If the original author string has multiple authors separated by commas
-  // and the first part doesn't have a comma, it might be "Last, First, Second, Third"
-  if (author.includes(', ') && !firstAuthor.includes(', ')) {
-    const allParts = author.split(',');
-    if (allParts.length >= 2) {
-      const lastName = allParts[0].trim();
-      const firstName = allParts[1].trim();
-      return `${firstName} ${lastName}`;
-    }
-  }
-  
-  return firstAuthor;
-}
-
-/**
- * Extracts the primary author name from the page HTML
- * Looks for author link with various patterns and selects only the first/primary author
+ * Extracts the author name from the page HTML
+ * Looks for author link with various patterns based on Amazon's structure
  */
 function extractAuthor(html: string): string | null {
   try {
-    // Pattern 1: Author link with (Author) text in proximity
-    const authorMatch1 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)<\/span>/);
-    if (authorMatch1 && authorMatch1[1]) {
-      return normalizeAuthorName(authorMatch1[1].trim());
+    // Pattern 1: Look for field-author= in href with (Author) text nearby
+    // This matches the pattern: field-author=Author+Name&text=Author+Name
+    const authorMatch1 = html.match(/<a[^>]*href="[^"]*field-author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
+    if (authorMatch1 && authorMatch1[2]) {
+      const authorName = decodeURIComponent(authorMatch1[2].replace(/\+/g, ' '));
+      return authorName.trim();
     }
     
-    // Pattern 2: Author link with dp_byline_cont_book_1 (common pattern)
-    const authorMatch2 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*ref="dp_byline_cont_book_1"[^>]*>([^<]+)<\/a>/);
-    if (authorMatch2 && authorMatch2[1]) {
-      return normalizeAuthorName(authorMatch2[1].trim());
+    // Pattern 2: Look for field-author= in href (more flexible)
+    const authorMatch2 = html.match(/<a[^>]*href="[^"]*field-author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>/);
+    if (authorMatch2 && authorMatch2[2]) {
+      const authorName = decodeURIComponent(authorMatch2[2].replace(/\+/g, ' '));
+      return authorName.trim();
     }
     
-    // Pattern 3: Any author link with /e/ pattern (fallback)
+    // Pattern 3: Look for (Author) text in proximity to any link
+    const authorMatch3 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
+    if (authorMatch3 && authorMatch3[1]) {
+      return authorMatch3[1].trim();
+    }
+    
+    // Pattern 4: Look for author= in href (alternative pattern)
+    const authorMatch4 = html.match(/<a[^>]*href="[^"]*author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>/);
+    if (authorMatch4 && authorMatch4[2]) {
+      const authorName = decodeURIComponent(authorMatch4[2].replace(/\+/g, ' '));
+      return authorName.trim();
+    }
+    
+    // Pattern 5: Look for any link with dp_byline_sr_book_1 (common Amazon pattern)
+    const authorMatch5 = html.match(/<a[^>]*href="[^"]*dp_byline_sr_book_1[^"]*"[^>]*>([^<]+)<\/a>/);
+    if (authorMatch5 && authorMatch5[1]) {
+      return authorMatch5[1].trim();
+    }
+    
+    // Pattern 6: Fallback - any link with /e/ pattern (author pages)
     const fallbackMatch = html.match(/<a[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>/);
     if (fallbackMatch && fallbackMatch[1]) {
-      return normalizeAuthorName(fallbackMatch[1].trim());
+      return fallbackMatch[1].trim();
     }
     
-    // Pattern 4: More flexible author matching
-    const authorMatch4 = html.match(/href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)</);
-    if (authorMatch4 && authorMatch4[1]) {
-      return normalizeAuthorName(authorMatch4[1].trim());
-    }
-    
-    // Pattern 5: Look for author in meta tags
+    // Pattern 7: Look for author in meta tags as last resort
     const metaAuthorMatch = html.match(/<meta[^>]*name="title"[^>]*content="[^"]*:\s*[^:]+:\s*([^:]+):/);
     if (metaAuthorMatch && metaAuthorMatch[1]) {
-      return normalizeAuthorName(metaAuthorMatch[1].trim());
+      return metaAuthorMatch[1].trim();
     }
     
     return null;
