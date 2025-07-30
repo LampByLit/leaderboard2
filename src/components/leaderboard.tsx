@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { BookCard } from './book-card';
 import { OutputData } from '@/lib/types';
 
@@ -7,6 +10,31 @@ interface LeaderboardProps {
 
 export function Leaderboard({ data }: LeaderboardProps) {
   const { books, generatedAt, totalBooks, validBooks, failedBooks } = data;
+  const [isRunningCycle, setIsRunningCycle] = useState(false);
+
+  const handleRunCycle = async () => {
+    if (isRunningCycle) return;
+    
+    setIsRunningCycle(true);
+    try {
+      const response = await fetch('/api/cycle', {
+        method: 'POST',
+      });
+      
+      if (response.ok) {
+        // Reload the page after a short delay to show updated data
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        console.error('Failed to run cycle');
+      }
+    } catch (error) {
+      console.error('Error running cycle:', error);
+    } finally {
+      setIsRunningCycle(false);
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -27,7 +55,22 @@ export function Leaderboard({ data }: LeaderboardProps) {
           </a>
         </div>
         <p className="text-gray-600 text-justify max-w-4xl mx-auto leading-relaxed text-sm">
-          This leaderboard uses several exhaustive methods to scrape Amazon paperback links and sort them by Best Sellers Rank. Amazon employs very strict anti-bot measures. This tool could break at any moment. If you want to add your book to the leaderboard,{' '}
+          This leaderboard uses several exhaustive methods to scrape Amazon paperback links and sort them by Best Sellers Rank. Amazon employs very strict anti-bot measures. This{' '}
+          <button
+            onClick={handleRunCycle}
+            disabled={isRunningCycle}
+            className="inline text-gray-600 cursor-default"
+            style={{ 
+              cursor: 'default',
+              userSelect: 'text',
+              WebkitUserSelect: 'text',
+              MozUserSelect: 'text',
+              msUserSelect: 'text'
+            }}
+          >
+            tool
+          </button>
+          {' '}could break at any moment. If you want to add your book to the leaderboard,{' '}
           <a 
             href="https://x.com/recapitul8r" 
             target="_blank" 

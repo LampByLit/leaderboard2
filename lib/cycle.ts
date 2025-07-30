@@ -1,24 +1,12 @@
 import { scrapeBooks } from './scraper';
 import { publishLeaderboard } from './publisher';
 import { writeMetadata } from './data-manager';
+import { HARDCODED_URLS } from './config';
 
 /**
  * Daily cycle module for scraping and publishing
  * Runs scraper followed by publisher with retry logic
  */
-
-// Hardcoded URLs to scrape (same as in scrape.ts)
-const HARDCODED_URLS = [
-  'https://www.amazon.com/NUTCRANKR-Dan-Baltic/dp/195189779X',
-  'https://www.amazon.com/Harassment-Architecture-Mike-Mangold/dp/1795641495',
-  'https://www.amazon.com/Finally-Some-Good-Delicious-Tacos/dp/1790356229',
-  'https://www.amazon.com/Improvidence-David-Herod/dp/B0CWCF7J13',
-  'https://www.amazon.com/INCEL-Novel-ARX-Han/dp/B0CJLCZVCG',
-  'https://www.amazon.com/dp/B0BRC7Z2Q9',
-  'https://www.amazon.com/Eggplant-Ogden-Nesmer/dp/B09MJBNL7X',
-  'https://www.amazon.com/Tower-Jack-BC/dp/0645928208',
-  'https://www.amazon.com/Mixtape-Hyperborea-Adem-Luz-Rienspects/dp/B0BW32CX2G',    
-];
 
 /**
  * Runs the scraper with retry logic

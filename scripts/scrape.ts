@@ -2,35 +2,14 @@
 
 /**
  * Main scraper script
- * Reads URLs from below and processes them to generate metadata.json
+ * Reads URLs from shared config and processes them to generate metadata.json
  */
 
 import fs from 'fs';
 import path from 'path';
 import { scrapeBooks } from '../lib/scraper';
 import { writeMetadata } from '../lib/data-manager';
-
-// Hardcoded URLs to scrape (you can update this manually)
-const HARDCODED_URLS = [
-  'https://www.amazon.com/NUTCRANKR-Dan-Baltic/dp/195189779X',
-  'https://www.amazon.com/Libertine-Dissolves-Toxic-Brodude/dp/B0F5YL43FD',
-  'https://www.amazon.com/Finally-Some-Good-Delicious-Tacos/dp/1790356229',
-  'https://www.amazon.com/Improvidence-David-Herod/dp/B0CWCF7J13',
-  'https://www.amazon.com/INCEL-Novel-ARX-Han/dp/B0CJLCZVCG',
-  'https://www.amazon.com/dp/B0BRC7Z2Q9',
-  'https://www.amazon.com/Eggplant-Ogden-Nesmer/dp/B09MJBNL7X',
-  'https://www.amazon.com/Tower-Jack-BC/dp/0645928208',
-  'https://www.amazon.com/Mixtape-Hyperborea-Adem-Luz-Rienspects/dp/B0BW32CX2G', 
-  'https://www.amazon.com/Savage-Green-Zulu-Alitspa/dp/B0B9265BPY',
-  'https://www.amazon.com/Shards-City-Robert-James-Cross/dp/B0DLGLKGFB',
-  'https://www.amazon.com/People-Mover-John-David-Card/dp/B0B477N8ZG',
-  'https://www.amazon.com/dp/B0BYRNM6Z5',
-  'https://www.amazon.com/SOCIOPATH-primadonna-girl-SAGA-dreamlander/dp/B09CV11BM9',
-  'https://www.amazon.com/Book-Void-Sun-Lion-Serpent-feet-Christ/dp/B09JJFF82K',
-  'https://www.amazon.com/Beautiful-Kingdom-K-K-Wing/dp/B0BTRTBP5H/',
-  'https://www.amazon.com/Last-Free-Man-Other-Stories/dp/1925536882',   
-  // Add more URLs here as needed
-];
+import { HARDCODED_URLS } from '../lib/config';
 
 /**
  * Main scraping function
@@ -39,11 +18,11 @@ async function main() {
   console.log('🚀 Starting Amazon book scraper...\n');
   
   try {
-    // Use hardcoded URLs for now
+    // Use URLs from shared config
     const urls = HARDCODED_URLS;
     
     if (urls.length === 0) {
-      console.log('❌ No URLs to scrape. Please add URLs to the HARDCODED_URLS array.');
+      console.log('❌ No URLs to scrape. Please add URLs to the HARDCODED_URLS array in lib/config.ts.');
       return;
     }
     
