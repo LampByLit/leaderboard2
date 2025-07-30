@@ -61,6 +61,16 @@ function debugExtraction(html: string, url: string): void {
   const authorTextMatch = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
   console.log(`Author with (Author) text: ${authorTextMatch ? authorTextMatch[1] : 'NOT FOUND'}`);
   
+  // Check for all author links to see what's available
+  const allAuthorLinks = html.match(/<a[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>/g);
+  if (allAuthorLinks) {
+    console.log(`All author links found: ${allAuthorLinks.length}`);
+    allAuthorLinks.slice(0, 5).forEach((link, index) => {
+      const authorName = link.match(/>([^<]+)</);
+      console.log(`  Author ${index + 1}: ${authorName ? authorName[1] : 'Unknown'}`);
+    });
+  }
+  
   // Check for BSR
   const bsrMatch = html.match(/#([0-9,]+)\s+in\s+Books/);
   console.log(`BSR found: ${bsrMatch ? bsrMatch[1] : 'NOT FOUND'}`);
@@ -127,51 +137,66 @@ function extractTitle(html: string): string | null {
  */
 function extractAuthor(html: string): string | null {
   try {
-    // Pattern 1: Look for the FIRST field-author= in href with (Author) text nearby
-    // This matches the pattern: field-author=Author+Name&text=Author+Name
-    const authorMatch1 = html.match(/<a[^>]*href="[^"]*field-author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
-    if (authorMatch1 && authorMatch1[2]) {
-      const authorName = decodeURIComponent(authorMatch1[2].replace(/\+/g, ' '));
-      return authorName.trim();
+    // Pattern 1: Look for the FIRST author link with /e/ pattern (most reliable)
+    // This gets the actual author name from the link text, not the field-author parameter
+    const authorMatch1 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>/);
+    if (authorMatch1 && authorMatch1[1]) {
+      return authorMatch1[1].trim();
     }
     
-    // Pattern 2: Look for the FIRST field-author= in href (primary author usually appears first)
-    const authorMatch2 = html.match(/<a[^>]*href="[^"]*field-author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>/);
+    // Pattern 2: Look for the FIRST field-author= in href with (Author) text nearby
+    // This matches the pattern: field-author=Author+Name&text=Author+Name
+    const authorMatch2 = html.match(/<a[^>]*href="[^"]*field-author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
     if (authorMatch2 && authorMatch2[2]) {
       const authorName = decodeURIComponent(authorMatch2[2].replace(/\+/g, ' '));
       return authorName.trim();
     }
     
-    // Pattern 3: Look for the FIRST (Author) text in proximity to any link
-    const authorMatch3 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
-    if (authorMatch3 && authorMatch3[1]) {
-      return authorMatch3[1].trim();
-    }
-    
-    // Pattern 4: Look for the FIRST author= in href (alternative pattern)
-    const authorMatch4 = html.match(/<a[^>]*href="[^"]*author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>/);
-    if (authorMatch4 && authorMatch4[2]) {
-      const authorName = decodeURIComponent(authorMatch4[2].replace(/\+/g, ' '));
+    // Pattern 3: Look for the FIRST field-author= in href (primary author usually appears first)
+    const authorMatch3 = html.match(/<a[^>]*href="[^"]*field-author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>/);
+    if (authorMatch3 && authorMatch3[2]) {
+      const authorName = decodeURIComponent(authorMatch3[2].replace(/\+/g, ' '));
       return authorName.trim();
     }
     
-    // Pattern 5: Look for the FIRST link with dp_byline_sr_book_1 (common Amazon pattern)
-    const authorMatch5 = html.match(/<a[^>]*href="[^"]*dp_byline_sr_book_1[^"]*"[^>]*>([^<]+)<\/a>/);
-    if (authorMatch5 && authorMatch5[1]) {
-      return authorMatch5[1].trim();
+    // Pattern 4: Look for the FIRST (Author) text in proximity to any link
+    const authorMatch4 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)/);
+    if (authorMatch4 && authorMatch4[1]) {
+      return authorMatch4[1].trim();
     }
     
-    // Pattern 6: Look for the FIRST link with /e/ pattern (author pages) - but be more specific
-    // Avoid links that might be secondary contributors
-    const authorMatch6 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>/);
+    // Pattern 5: Look for the FIRST author= in href (alternative pattern)
+    const authorMatch5 = html.match(/<a[^>]*href="[^"]*author=([^&]+)[^"]*"[^>]*>([^<]+)<\/a>/);
+    if (authorMatch5 && authorMatch5[2]) {
+      const authorName = decodeURIComponent(authorMatch5[2].replace(/\+/g, ' '));
+      return authorName.trim();
+    }
+    
+    // Pattern 6: Look for the FIRST link with dp_byline_sr_book_1 (common Amazon pattern)
+    const authorMatch6 = html.match(/<a[^>]*href="[^"]*dp_byline_sr_book_1[^"]*"[^>]*>([^<]+)<\/a>/);
     if (authorMatch6 && authorMatch6[1]) {
       return authorMatch6[1].trim();
     }
     
-    // Pattern 7: Look for author in meta tags as last resort
+    // Pattern 7: Look for the first author link in the byline section (most specific)
+    // This looks for the first author link that appears after "by" or in the byline area
+    const bylineMatch = html.match(/by\s*<a[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>/);
+    if (bylineMatch && bylineMatch[1]) {
+      return bylineMatch[1].trim();
+    }
+    
+    // Pattern 8: Look for author in meta tags as last resort
     const metaAuthorMatch = html.match(/<meta[^>]*name="title"[^>]*content="[^"]*:\s*[^:]+:\s*([^:]+):/);
     if (metaAuthorMatch && metaAuthorMatch[1]) {
       return metaAuthorMatch[1].trim();
+    }
+    
+    // Pattern 9: Extract author from URL if it's in the format /Title-Author-Name/dp/
+    // This is a fallback for cases where the HTML structure is unclear
+    const urlAuthorMatch = html.match(/<meta[^>]*property="og:url"[^>]*content="[^"]*\/([^\/]+)-([^\/]+)\/dp\//);
+    if (urlAuthorMatch && urlAuthorMatch[2]) {
+      const authorFromUrl = urlAuthorMatch[2].replace(/-/g, ' ');
+      return authorFromUrl.trim();
     }
     
     return null;
@@ -309,8 +334,8 @@ export async function scrapeBook(url: string, retryCount = 0): Promise<ScrapingR
 
     const html = await response.text();
     
-    // Debug extraction for failing books
-    if (url.includes('B0BRC7Z2Q9') || url.includes('1795641495')) {
+    // Debug extraction for failing books and specific books we're investigating
+    if (url.includes('B0BRC7Z2Q9') || url.includes('1795641495') || url.includes('195189779X') || url.includes('B0DLGLKGFB')) {
       debugExtraction(html, url);
     }
     
