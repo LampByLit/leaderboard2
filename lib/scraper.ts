@@ -116,39 +116,70 @@ function extractTitle(html: string): string | null {
 }
 
 /**
- * Extracts the author name from the page HTML
- * Looks for author link with various patterns
+ * Normalizes author name from "Last, First" format to "First Last" format
+ * For multiple authors, selects only the primary (first) author
+ */
+function normalizeAuthorName(author: string): string {
+  // Handle multiple authors by taking only the first one
+  const firstAuthor = author.split(',')[0].trim();
+  
+  // Check if the first author is in "Last, First" format
+  if (firstAuthor.includes(', ')) {
+    const parts = firstAuthor.split(', ');
+    if (parts.length === 2) {
+      // Reverse to "First Last" format
+      return `${parts[1]} ${parts[0]}`;
+    }
+  }
+  
+  // If the original author string has multiple authors separated by commas
+  // and the first part doesn't have a comma, it might be "Last, First, Second, Third"
+  if (author.includes(', ') && !firstAuthor.includes(', ')) {
+    const allParts = author.split(',');
+    if (allParts.length >= 2) {
+      const lastName = allParts[0].trim();
+      const firstName = allParts[1].trim();
+      return `${firstName} ${lastName}`;
+    }
+  }
+  
+  return firstAuthor;
+}
+
+/**
+ * Extracts the primary author name from the page HTML
+ * Looks for author link with various patterns and selects only the first/primary author
  */
 function extractAuthor(html: string): string | null {
   try {
     // Pattern 1: Author link with (Author) text in proximity
     const authorMatch1 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>[^<]*<span[^>]*class="[^"]*a-color-secondary[^"]*"[^>]*>\(Author\)<\/span>/);
     if (authorMatch1 && authorMatch1[1]) {
-      return authorMatch1[1].trim();
+      return normalizeAuthorName(authorMatch1[1].trim());
     }
     
     // Pattern 2: Author link with dp_byline_cont_book_1 (common pattern)
     const authorMatch2 = html.match(/<a[^>]*class="[^"]*a-link-normal[^"]*"[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*ref="dp_byline_cont_book_1"[^>]*>([^<]+)<\/a>/);
     if (authorMatch2 && authorMatch2[1]) {
-      return authorMatch2[1].trim();
+      return normalizeAuthorName(authorMatch2[1].trim());
     }
     
     // Pattern 3: Any author link with /e/ pattern (fallback)
     const fallbackMatch = html.match(/<a[^>]*href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)<\/a>/);
     if (fallbackMatch && fallbackMatch[1]) {
-      return fallbackMatch[1].trim();
+      return normalizeAuthorName(fallbackMatch[1].trim());
     }
     
     // Pattern 4: More flexible author matching
     const authorMatch4 = html.match(/href="[^"]*\/[^\/]+\/e\/[^"]*"[^>]*>([^<]+)</);
     if (authorMatch4 && authorMatch4[1]) {
-      return authorMatch4[1].trim();
+      return normalizeAuthorName(authorMatch4[1].trim());
     }
     
     // Pattern 5: Look for author in meta tags
     const metaAuthorMatch = html.match(/<meta[^>]*name="title"[^>]*content="[^"]*:\s*[^:]+:\s*([^:]+):/);
     if (metaAuthorMatch && metaAuthorMatch[1]) {
-      return metaAuthorMatch[1].trim();
+      return normalizeAuthorName(metaAuthorMatch[1].trim());
     }
     
     return null;

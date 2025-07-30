@@ -17,18 +17,6 @@ export function BookCard({ book, rank }: BookCardProps) {
     return 'text-gray-600 bg-gray-100';
   };
 
-  const normalizeAuthorName = (author: string): string => {
-    // Check if author name is in "Last, First" format
-    if (author.includes(', ')) {
-      const parts = author.split(', ');
-      if (parts.length === 2) {
-        // Reverse to "First Last" format
-        return `${parts[1]} ${parts[0]}`;
-      }
-    }
-    return author;
-  };
-
   return (
     <div className="material-card p-6 hover:shadow-material-3 transition-all duration-200">
       <div className="flex items-start space-x-4">
@@ -68,7 +56,7 @@ export function BookCard({ book, rank }: BookCardProps) {
             </h3>
           </a>
           <p className="text-sm text-gray-600 mt-1">
-            by {normalizeAuthorName(book.author)}
+            by {book.author}
           </p>
           
           <div className="mt-3 flex items-center space-x-4">
