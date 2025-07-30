@@ -80,15 +80,6 @@ export function BookCard({ book, rank }: BookCardProps) {
                 {formatBSR(book.bestSellersRank)}
               </span>
             </div>
-            
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                Rank
-              </span>
-              <span className="text-sm font-medium text-gray-700">
-                #{rank}
-              </span>
-            </div>
           </div>
           
           {/* Validation Badge */}
