@@ -103,13 +103,6 @@ export function BookCard({ book, rank }: BookCardProps) {
           </div>
         </div>
       </div>
-      
-      {/* Timestamp */}
-      <div className="mt-4 pt-3 border-t border-gray-200">
-        <p className="text-xs text-gray-500">
-          Scraped: {new Date(book.scrapedAt).toLocaleDateString()}
-        </p>
-      </div>
     </div>
   );
 } 
