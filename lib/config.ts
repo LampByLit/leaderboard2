@@ -28,7 +28,7 @@ export const HARDCODED_URLS = [
   'https://www.amazon.com/dp/B0DZVMX6KV/',
   'https://www.amazon.com/Raft-Micro-Novel-Phil-Rot/dp/B0DQ5PV8BX',
   'https://www.amazon.com/dp/195759909X',
-  'https://www.amazon.com/Synthesis-Objective-Subjective-Writing-philosophy/dp/1777255511',
+  'https://www.amazon.com/Meme-Max-Lethe/dp/1951897935',
 
   // Add more URLs here as needed
 ];
