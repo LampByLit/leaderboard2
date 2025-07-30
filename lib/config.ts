@@ -23,6 +23,10 @@ export const HARDCODED_URLS = [
   'https://www.amazon.com/Odyssey-Dingbats-collection-stories-obscurities/dp/B0DT6X7HJ9',  
   'https://www.amazon.com/Worst-Boyfriend-Ever-Sensitive-Young/dp/B0F3XSJGSD',
   'https://www.amazon.com/Black-Album-Matthew-Pegas/dp/B0CZ4MCD7X',
+  'https://www.amazon.com/Soap-Scum-Jesse-Larkins/dp/B0DFTCW5XV',
+  'https://www.amazon.com/gp/product/B08KFJG9KW',
+  'https://www.amazon.com/Synthesis-Objective-Subjective-Writing-philosophy/dp/1777255511',
+
   // Add more URLs here as needed
 ];
 
